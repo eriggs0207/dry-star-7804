@@ -2,8 +2,9 @@ require 'rails_helper'
 RSpec.describe 'doctor show page' do
   before :each do
     @hospital_1 = Hospital.create!(name: "Grey Sloan Memorial Hospital")
+    @hospital_2 = Hospital.create!(name: "Seaside Health & Wellness Center")
     @doctor_1 = @hospital_1.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
-    @doctor_2 = @hospital_1.doctors.create!(name: "Alex Karev", specialty: "Pediatric Surgery", university: "Johns Hopkins University")
+    @doctor_2 = @hospital_2.doctors.create!(name: "Alex Karev", specialty: "Pediatric Surgery", university: "Johns Hopkins University")
 
     @patient_1 = Patient.create!(name: "Katie Bryce", age: 24)
     @patient_2 = Patient.create!(name: "Denny Duquette", age: 39)
@@ -47,6 +48,41 @@ RSpec.describe 'doctor show page' do
         expect(page).to have_content(@doctor_2.university)
       end
       expect(page).to_not have_content(@doctor_1.name)
+    end
+
+    it 'I see the name of the hospital where this doctor works' do
+      visit doctor_path(@doctor_1)
+
+      expect(page).to have_content(@hospital_1.name)
+      expect(page).to_not have_content(@hospital_2.name)
+
+      visit doctor_path(@doctor_2)
+
+      expect(page).to have_content(@hospital_2.name)
+      expect(page).to_not have_content(@hospital_1.name)
+    end
+
+    it 'I see the names of all of the patients this doctor has' do
+      visit doctor_path(@doctor_1)
+
+      within("#doctor-patients") do
+        expect(page).to have_content(@patient_1.name)
+        expect(page).to have_content(@patient_2.name)
+        expect(page).to have_content(@patient_3.name)
+        expect(page).to_not have_content(@patient_4.name)
+        expect(page).to_not have_content(@patient_5.name)
+        expect(page).to_not have_content(@patient_6.name)
+      end
+      visit doctor_path(@doctor_2)
+
+      within("#doctor-patients") do
+        expect(page).to have_content(@patient_4.name)
+        expect(page).to have_content(@patient_5.name)
+        expect(page).to have_content(@patient_6.name)
+        expect(page).to_not have_content(@patient_1.name)
+        expect(page).to_not have_content(@patient_2.name)
+        expect(page).to_not have_content(@patient_3.name)
+      end
     end
   end
 end

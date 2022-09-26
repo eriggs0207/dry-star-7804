@@ -6,3 +6,12 @@
   <p>Education- <%= @doctor.university %></p>
 
 </div>
+
+<div id="doctor-patients">
+<% @doctor.patients.each do |patient| %>
+    <ul>
+      <p>Name - <%= patient.name %></p>
+      <p>Age - <%= patient.age %></p>
+    </ul>
+    <% end %>
+  </div>
