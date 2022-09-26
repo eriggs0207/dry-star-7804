@@ -10,7 +10,7 @@
 <div id="doctor-patients">
 <% @doctor.patients.each do |patient| %>
     <ul>
-      <p>Name - <%= patient.name %></p>
+      <p>Name - <%= patient.name %><%= button_to "Remove #{patient.id}", doctor_path(@doctor), method: :delete %></p>
       <p>Age - <%= patient.age %></p>
     </ul>
     <% end %>

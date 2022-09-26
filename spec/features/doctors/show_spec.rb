@@ -85,4 +85,18 @@ RSpec.describe 'doctor show page' do
       end
     end
   end
+#   As a visitor
+# When I visit a Doctor's show page
+# Next to each patient's name, I see a button to remove that patient from that doctor's caseload
+# When I click that button for one patient
+# I'm brought back to the Doctor's show page
+# And I no longer see that patient's name listed
+  describe 'user story 2' do
+    it 'Next to each patients name, I see a button to remove that patient' do
+      visit doctor_path(@doctor_1)
+
+      expect(page).to have_button("Remove #{@patient_1.id}")
+
+    end
+  end
 end
