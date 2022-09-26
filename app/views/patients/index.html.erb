@@ -1,0 +1,8 @@
+<h5>Patients</h5>
+
+<div id="adult-patients">
+  <% @patients.adult_patients.each do |adult| %>
+    <p>Name - <%= adult.name %></p>
+    <p>Age- <%= adult.age %></p>
+    <% end %>
+</div>
