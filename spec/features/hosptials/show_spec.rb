@@ -6,6 +6,8 @@ RSpec.describe 'hosptial show page' do
 
     @doctor_1 = @hospital_1.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
     @doctor_2 = @hospital_1.doctors.create!(name: "Alex Karev", specialty: "Pediatric Surgery", university: "Johns Hopkins University")
+    @doctor_5 = @hospital_1.doctors.create!(name: "Ivan Dragov", specialty: "ER", university: "St Petersburg University")
+    @doctor_6 = @hospital_1.doctors.create!(name: "Clubber Lang", specialty: "Surgery", university: "School of Hard Knocks")
     @doctor_3 = @hospital_2.doctors.create!(name: "Miranda Bailey", specialty: "General Surgery", university: "Stanford University")
     @doctor_4 = @hospital_2.doctors.create!(name: "Derek McDreamy Shepherd", specialty: "Attending Surgeon", university: "University of Pennsylvania")
 
@@ -19,9 +21,14 @@ RSpec.describe 'hosptial show page' do
     DoctorPatient.create!(doctor_id: @doctor_1.id, patient_id: @patient_1.id)
     DoctorPatient.create!(doctor_id: @doctor_1.id, patient_id: @patient_2.id)
     DoctorPatient.create!(doctor_id: @doctor_1.id, patient_id: @patient_3.id)
-    DoctorPatient.create!(doctor_id: @doctor_2.id, patient_id: @patient_4.id)
-    DoctorPatient.create!(doctor_id: @doctor_2.id, patient_id: @patient_5.id)
-    DoctorPatient.create!(doctor_id: @doctor_2.id, patient_id: @patient_6.id)
+    DoctorPatient.create!(doctor_id: @doctor_1.id, patient_id: @patient_4.id)
+    DoctorPatient.create!(doctor_id: @doctor_5.id, patient_id: @patient_4.id)
+    DoctorPatient.create!(doctor_id: @doctor_5.id, patient_id: @patient_5.id)
+    DoctorPatient.create!(doctor_id: @doctor_5.id, patient_id: @patient_6.id)
+    DoctorPatient.create!(doctor_id: @doctor_2.id, patient_id: @patient_1.id)
+    DoctorPatient.create!(doctor_id: @doctor_2.id, patient_id: @patient_2.id)
+    DoctorPatient.create!(doctor_id: @doctor_3.id, patient_id: @patient_2.id)
+
   end
 
   # As a visitor
@@ -83,6 +90,18 @@ RSpec.describe 'hosptial show page' do
       within("#doctor-#{@doctor_2.id}") do
         expect(page).to have_content(@doctor_2.patient_count)
       end
+
+    end
+
+    it 'I see the list of doctors is ordered from most number of patients to least number of patients' do
+      visit hospital_path(@hospital_1)
+
+      expect(@doctor_1).to appear_before(@doctor_5)
+      expect(@doctor_5).to appear_before(@doctor_2)
+      expect(@doctor_2).to appear_before(@doctor_6)
+      expect(@doctor_5).to_not appear_before(@doctor_1)
+      expect(@doctor_2).to_not appear_before(@doctor_5)
+      expect(@doctor_6).to_not appear_before(@doctor_2)
 
     end
   end
