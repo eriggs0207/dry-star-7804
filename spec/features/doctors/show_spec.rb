@@ -96,7 +96,27 @@ RSpec.describe 'doctor show page' do
       visit doctor_path(@doctor_1)
 
       expect(page).to have_button("Remove #{@patient_1.id}")
+      expect(page).to_not have_button("Remove #{@patient_5.id}")
 
+      visit doctor_path(@doctor_2)
+
+      expect(page).to have_button("Remove #{@patient_4.id}")
+      expect(page).to_not have_button("Remove #{@patient_2.id}")
+
+    end
+
+    it "When I click that button for one patient I no longer see that patients name listed" do
+      visit doctor_path(@doctor_1)
+
+      click_button("Remove #{@patient_1.id}")
+
+      expect(page).to_not have_content(@patient_1.id)
+
+      visit doctor_path(@doctor_2)
+
+      click_button("Remove #{@patient_5.id}")
+
+      expect(page).to_not have_content(@patient_5.id)
     end
   end
 end
